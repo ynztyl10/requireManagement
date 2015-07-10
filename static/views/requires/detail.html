@@ -1,0 +1,238 @@
+<form class="form-horizontal" ng-submit="save()">
+  <div class="form-group">
+    <label for="code" class="col-sm-2 control-label">需求标题</label>
+    <div class="col-sm-3">
+      <input type="text" class="form-control" ng-model="require.code" id="code" required/>
+    </div>
+    <label for="committer" class="col-sm-2 control-label">需求提出人</label>
+    <div class="col-sm-3">
+      <input type="text" class="form-control" ng-model="require.committer" id="committer" required/>
+    </div>
+  </div>
+
+
+
+  <div class="form-group">
+    <label for="source" class="col-sm-2 control-label">需求来源部门</label>
+    <div class="col-sm-3">
+      <input type="text" class="form-control" ng-model="require.source" id="source" required/>
+    </div>
+    <label for="type" class="col-sm-2 control-label">需求来源类型</label>
+    <div class="col-sm-3">
+      <select class="form-control" id="type" ng-model="require.type" ng-options="option for option in data.types" required>
+        <option value="">请选择</option>
+      </select>
+    </div>
+  </div>
+
+
+  <div class="form-group">
+    <label for="datasource" class="col-sm-2 control-label">数据来源</label>
+    <div class="col-sm-3">
+      <input type="text" class="form-control" ng-model="require.datasource" id="datasource"/>
+    </div>
+    <label for="collectType" class="col-sm-2 control-label">具体采集类型</label>
+    <div class="col-sm-3">
+      <input type="text" class="form-control" ng-model="require.collectType" id="collectType"/>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="belong" class="col-sm-2 control-label">业务归属范围</label>
+    <div class="col-sm-9">
+      <label class="checkbox-inline" ng-repeat="belong in data.belongs">
+        <input type="checkbox" name="{{belong.name}}" ng-model="belong.check" value="{{belong.value}}" ng-true-value="{{belong.value}}" ng-click="toggle(belong)" ng-checked="belong.checked"> {{belong.name}}
+      </label>
+      <h6>注：商城门户包含移动商城、积分商城、一级门户、统一门户、统一搜索</h6>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="endDate" class="col-sm-2 control-label">插码完成时间</label>
+    <div class="col-sm-3">
+      <input type="text" class="form-control" ui-date="dateOptions" ng-model="require.endDate" id="endDate" required>
+    </div>
+    <label for="onlineDate" class="col-sm-2 control-label">预计上线时间</label>
+    <div class="col-sm-3">
+      <input type="text" class="form-control" ui-date="dateOptions" ng-model="require.onlineDate" id="onlineDate" required>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="testPlan" class="col-sm-2 control-label">测试计划</label>
+    <div class="col-sm-3">
+      <input type="text" class="form-control" ng-model="require.testPlan" id="testPlan"/>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="dataContent" class="col-sm-2 control-label">获取数据</label>
+    <div class="col-sm-8">
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          移动商城
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        <label class="checkbox-inline" ng-repeat="mallData in data.mallDatas">
+        <input type="checkbox" name="{{mallData.name}}" ng-model="mallData.check" value="{{mallData.value}}" ng-true-value="{{mallData.value}}" ng-click="toggle(mallData)" ng-checked="mallData.checked"> {{mallData.name}}
+      </label>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingTwo">
+      <h4 class="panel-title">
+        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          一级门户
+        </a>
+      </h4>
+    </div>
+    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+      <div class="panel-body">
+        <label class="checkbox-inline" ng-repeat="primeDoor in data.primeDoors">
+        <input type="checkbox" name="{{primeDoor.name}}" ng-model="primeDoor.check" value="{{primeDoor.value}}" ng-true-value="{{primeDoor.value}}" ng-click="toggle(primeDoor)" ng-checked="primeDoor.checked"> {{primeDoor.name}}
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingThree">
+      <h4 class="panel-title">
+        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          一级WAP
+        </a>
+      </h4>
+    </div>
+    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+      <div class="panel-body">
+        <label class="checkbox-inline" ng-repeat="primeWap in data.primeWaps">
+        <input type="checkbox" name="{{primeWap.name}}" ng-model="primeWap.check" value="{{primeWap.value}}" ng-true-value="{{primeWap.value}}" ng-click="toggle(primeWap)" ng-checked="primeWap.checked"> {{primeWap.name}}
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingFour">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+          统一搜索
+        </a>
+      </h4>
+    </div>
+    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+      <div class="panel-body">
+        <label class="checkbox-inline" ng-repeat="search in data.searchs">
+        <input type="checkbox" name="{{search.name}}" ng-model="search.check" value="{{search.value}}" ng-true-value="{{search.value}}" ng-click="toggle(search)" ng-checked="search.checked"> {{search.name}}
+      </label>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingFive">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
+          统一门户
+        </a>
+      </h4>
+    </div>
+    <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+      <div class="panel-body">
+        <label class="checkbox-inline" ng-repeat="uniteDoor in data.uniteDoors">
+        <input type="checkbox" name="{{uniteDoor.name}}" ng-model="uniteDoor.check" value="{{uniteDoor.value}}" ng-true-value="{{uniteDoor.value}}" ng-click="toggle(uniteDoor)" ng-checked="uniteDoor.checked"> {{uniteDoor.name}}
+      </label>
+      </div>
+    </div>
+  </div>
+    <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingSeven">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
+          积分商城
+        </a>
+      </h4>
+    </div>
+    <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
+      <div class="panel-body">
+        <label class="checkbox-inline" ng-repeat="scoreMall in data.scoreMalls">
+        <input type="checkbox" name="{{scoreMall.name}}" ng-model="scoreMall.check" value="{{scoreMall.value}}" ng-true-value="{{scoreMall.value}}" ng-click="toggle(scoreMall)" ng-checked="scoreMall.checked"> {{scoreMall.name}}
+      </label>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingSix">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="true" aria-controls="collapseSix">
+          当期营销
+        </a>
+      </h4>
+    </div>
+    <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+      <div class="panel-body">
+        <label class="checkbox-inline" ng-repeat="marketing in data.marketings">
+        <input type="checkbox" name="{{marketing.name}}" ng-model="marketing.check" value="{{marketing.value}}" ng-true-value="{{marketing.value}}" ng-click="toggle(marketing)" ng-checked="marketing.checked"> {{marketing.name}}
+      </label>
+      </div>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="showType" class="col-sm-2 control-label">展现形式</label>
+    <div class="col-sm-9">
+      <label class="checkbox-inline" ng-repeat="showType in data.showTypes">
+        <input type="checkbox" name="{{showType.name}}" ng-model="showType.check" value="{{showType.value}}" ng-true-value="{{showType.value}}" ng-click="toggle(showType)" ng-checked="showType.checked"> {{showType.name}}
+      </label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="other" class="col-sm-2 control-label">其他说明</label>
+    <div class="col-sm-8">
+      <textarea class="form-control" ng-model="require.other" id="other" rows="5" />
+    </div>
+  </div>
+
+    <div class="form-group">
+    <label for="isNewInsert" class="col-sm-2 control-label">新增插码</label>
+    <div class="col-sm-9">
+      <label class="checkbox-inline" ng-repeat="insert in data.inserts">
+        <input type="checkbox" name="{{insert.name}}" ng-model="insert.check" value="{{insert.value}}" ng-true-value="{{insert.value}}" ng-click="toggle(insert)" ng-checked="insert.checked"> {{insert.name}}
+      </label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="rds" class="col-sm-2 control-label">开发人员</label>
+    <div class="col-sm-2">
+      <input type="text" class="form-control" ng-model="require.rds" id="rds"/>
+    </div>
+    <label for="devManager" class="col-sm-1 control-label">开发经理</label>
+    <div class="col-sm-2">
+      <input type="text" class="form-control" ng-model="require.devManager" id="devManager"/>
+    </div>
+    <label for="pm" class="col-sm-1 control-label">项目经理</label>
+    <div class="col-sm-2">
+      <input type="text" class="form-control" ng-model="require.pm" id="pm"/>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="workload" class="col-sm-2 control-label">工作量合计（天）</label>
+    <div class="col-sm-2">
+      <input type="text" class="form-control" ng-model="require.workload" id="workload"/>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-9">
+      <button id="save" type="submit" class="btn btn-primary btn-lg">保存</button>
+    </div>
+  </div>
+</form>
