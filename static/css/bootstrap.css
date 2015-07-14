@@ -2291,6 +2291,7 @@ th {
 }
 .table th, .table td{
     text-align: center;
+    vertical-align: middle;
 }
 .table-condensed > thead > tr > th,
 .table-condensed > tbody > tr > th,
@@ -6588,4 +6589,5 @@ button.close {
     display: none !important;
   }
 }
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
 /*# sourceMappingURL=bootstrap.css.map */

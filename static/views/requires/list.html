@@ -4,45 +4,27 @@
 </h2>
 
 <table class="table  table-bordered table-hover">
-	<tr>
+	<tr class="success">
 		<td>
-			需求标题
+			<strong>需求标题</strong>
 		</td>
 		<td>
-			提出人
+			<strong>提出人</strong>
 		</td>
 		<td>
-			计划完成时间
+			<strong>计划完成时间</strong>
 		</td>
 		<td>
-			操作
+			<strong>操作</strong>
 		</td>
 	</tr>
 	<tr ng-repeat="require in requires">
-		<td><a href="#/requires/{{require._id.$oid}}">{{require._id.$oid}}</a></td>
+		<td><a href="#/requires/{{require._id.$oid}}">{{require.code}}</a></td>
 		<td>{{require.committer}}</td>
 		<td>{{require.onlineDate}}</td>
 		<td>
 			<a href="#/requires/{{require._id.$oid}}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil" ></span>编辑</button></a>
-			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-trash"></span>删除</button>
-				<!-- Modal -->
-<div class="modal fade left" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">删除需求</h4>
-      </div>
-      <div class="modal-body">
-        确认删除需求？
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-primary" ng-model="require" data-dismiss="modal" ng-click="delete(require)">确认删除</button>
-      </div>
-    </div>
-  </div>
-</div>
+			<button type="button" class="btn btn-primary" ng-click="deleteItemWithConfirmation(require)"><span class="glyphicon glyphicon-trash"></span>删除</button>
 		</td>
 	</tr>
 </table>

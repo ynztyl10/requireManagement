@@ -8,7 +8,8 @@ angular.module("getrequires.services", ["ngResource"]).
             return (typeof(this.id) === 'undefined');
         }
         return Require;
-    }).
+    })
+    .
     factory('Data',function(){
         var data = {}
         data.belongs = [
@@ -1095,29 +1096,109 @@ angular.module("getrequires.services", ["ngResource"]).
     return data;
     });
 
-angular.module("getrequires", ["getrequires.services","ui.date"])
-    .config(function ($routeProvider) {
-        $routeProvider
-            .when('/', {templateUrl: '/static/views/requires/list.html', controller: "RequireListController"})
-            .when('/requires/new', {templateUrl: '/static/views/requires/create.html', controller: "RequireCreateController"})
-            .when('/requires/:requireId', {templateUrl: '/static/views/requires/detail.html', controller: "RequireDetailController"});
-    });
+angular.module("getrequires", ["getrequires.services","ngRoute","ui.date","ui.bootstrap"])
+    .factory('modalWindowFactory', function ($modal) {
 
-function RequireListController($scope, $location,Require) {
+    var modalWindowController = _modalWindowController;
+
+    return {
+
+        // Show a modal window with the specified title and msg
+        show: function (title, msg, confirmCallback, cancelCallback) {
+            // Show window
+            var modalInstance = $modal.open({
+                animation : true,
+                templateUrl: '/static/views/requires/modal-view.html',
+                controller: modalWindowController,
+                size: 'sm',
+                resolve: {
+                    title: function () {
+                        return title;
+                    },
+                    body: function () {
+                        return msg;
+                    }
+                }
+            });
+            // Register confirm and cancel callbacks
+            modalInstance.result.then(
+                // if any, execute confirm callback
+                function() {
+                    if (confirmCallback != undefined) {
+                        confirmCallback();
+                    }
+                },
+                // if any, execute cancel callback
+                function () {
+                    if (cancelCallback != undefined) {
+                        cancelCallback();
+                    }
+                });
+        }
+    };
+
+    function _modalWindowController ($scope, $modalInstance, title, body){
+        $scope.title = "";
+        $scope.body = "";
+
+        // If specified, fill window title and message with parameters
+        if (title) {
+            $scope.title = title;
+        }
+        if (body) {
+            $scope.body = body;
+        }
+
+        $scope.confirm = function () {
+            $modalInstance.close();
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss();
+        };
+    };
+
+
+    })
+    .controller("RequireListController",function ($scope, $location,modalWindowFactory,Require) {
     $scope.requires = Require.query();
     
-    $scope.delete = function(require){
-        console.log(require);
-        // require.$delete({requireId:require._id.$oid},function(require,headers){
-        //     toastr.success("成功删除");
-        //     $location.path('/');
-        // });
+    $scope.deleteItemWithConfirmation = function(item) {
+
+        var serverDelete = function () {
+            return item.$delete(
+                { requireId: item._id.$oid }, 
+                function () {
+                    toastr.success("成功删除");
+                    // Remove from scope
+                    var index = $scope.requires.indexOf(item);
+                    $scope.requires.splice(index, 1);
+                },
+                // error callback
+                function (error) {
+                    if (error.data === undefined) {
+                        error.data = '';
+                    }
+                    toastr.error("Error. " + error.data);
+                });
+        };
+
+        var title = "删除 '" + item.code + "'";
+        var msg = "确认删除该需求？";
+        modalWindowFactory.show(title, msg, serverDelete);
+
     };
     
-}
+    
+})
+    .controller("RequireCreateController",function ($scope, $routeParams, $location, Require, Data) {
 
-
-function RequireCreateController($scope, $routeParams, $location, Require, Data) {
+    $scope.collapseSeven = true;
+    $scope.collapseSix = true;
+    $scope.collapseFour = true;
+    $scope.collapseFive = true;
+    $scope.collapseThree = true;
+    $scope.collapseTwo = true;
     $scope.data = Data
     //业务所属范围
     $scope.dateOptions = Data.dateOptions;
@@ -1138,15 +1219,19 @@ function RequireCreateController($scope, $routeParams, $location, Require, Data)
     $scope.require.inserts = $scope.data.inserts;
     //after form commit
     $scope.save = function () {
-    	$scope.require.$save(function (require, headers) {
-    		toastr.success("新增需求");
+        $scope.require.$save(function (require, headers) {
+            toastr.success("新增需求");
             $location.path('/');
         });
     };
-}
-
-
-function RequireDetailController($scope, $routeParams, $location, Require,Data) {
+})  
+    .controller("RequireDetailController",function ($scope, $routeParams, $location, Require,Data) {
+        $scope.collapseSeven = true;
+    $scope.collapseSix = true;
+    $scope.collapseFour = true;
+    $scope.collapseFive = true;
+    $scope.collapseThree = true;
+    $scope.collapseTwo = true;
     $scope.data = Data;
     var requireId = $routeParams.requireId;
     $scope.require = Require.get({requireId: requireId},function(){
@@ -1172,5 +1257,21 @@ function RequireDetailController($scope, $routeParams, $location, Require,Data) 
         });
     };
 
-}
+})
+    .config(function ($routeProvider) {
+        $routeProvider
+            .when('/', {templateUrl: '/static/views/requires/list.html', controller: "RequireListController"})
+            .when('/requires/new', {templateUrl: '/static/views/requires/create.html', controller: "RequireCreateController"})
+            .when('/requires/:requireId', {templateUrl: '/static/views/requires/detail.html', controller: "RequireDetailController"});
+    });
+
+
+
+
+
+
+
+
+
+
 
