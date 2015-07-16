@@ -1,4 +1,4 @@
-FROM tenxcloud/centos
+FROM ynztyl10/requireManagement
 
 RUN mkdir -p /data/db
 RUN mongodb/bin/mongod --dbpath /data/db
