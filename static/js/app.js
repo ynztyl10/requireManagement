@@ -994,6 +994,9 @@ angular.module("getrequires.services", ["ngResource"]).
         "新增插码","插码变更","需求提取"
 
     ];
+    data.platforms = [
+        "一级商城","一级门户","积分商城","一级WAP","手机APP"
+    ];
     //展示类型
     data.showTypes = [
         {
@@ -1096,7 +1099,7 @@ angular.module("getrequires.services", ["ngResource"]).
     return data;
     });
 
-angular.module("getrequires", ["getrequires.services","ngRoute","ui.date","ui.bootstrap"])
+angular.module("getrequires", ["getrequires.services","ngRoute","ui.date","ui.bootstrap","getcodes"])
     .factory('modalWindowFactory', function ($modal) {
 
     var modalWindowController = _modalWindowController;
@@ -1263,6 +1266,147 @@ angular.module("getrequires", ["getrequires.services","ngRoute","ui.date","ui.bo
             .when('/', {templateUrl: '/static/views/requires/list.html', controller: "RequireListController"})
             .when('/requires/new', {templateUrl: '/static/views/requires/create.html', controller: "RequireCreateController"})
             .when('/requires/:requireId', {templateUrl: '/static/views/requires/detail.html', controller: "RequireDetailController"});
+
+    });
+
+angular.module("getcodes.services", ["ngResource"]).
+    factory('Code', function ($resource) {
+        var Code = $resource('/api/v1/codes/:codeId', {codeId: '@id'},{
+                update:{method:'POST',params:{codeId:'@id'}}
+            }
+        );
+        Code.prototype.isNew = function(){
+            return (typeof(this.id) === 'undefined');
+        }
+        return Code;
+    });
+
+angular.module("getcodes", ["getcodes.services","ngRoute","ui.date","ui.bootstrap"])
+    .factory('modalWindowFactory', function ($modal) {
+
+    var modalWindowController = _modalWindowController;
+
+    return {
+
+        // Show a modal window with the specified title and msg
+        show: function (title, msg, confirmCallback, cancelCallback) {
+            // Show window
+            var modalInstance = $modal.open({
+                animation : true,
+                templateUrl: '/static/views/requires/modal-view.html',
+                controller: modalWindowController,
+                size: 'sm',
+                resolve: {
+                    title: function () {
+                        return title;
+                    },
+                    body: function () {
+                        return msg;
+                    }
+                }
+            });
+            // Register confirm and cancel callbacks
+            modalInstance.result.then(
+                // if any, execute confirm callback
+                function() {
+                    if (confirmCallback != undefined) {
+                        confirmCallback();
+                    }
+                },
+                // if any, execute cancel callback
+                function () {
+                    if (cancelCallback != undefined) {
+                        cancelCallback();
+                    }
+                });
+        }
+    };
+
+    function _modalWindowController ($scope, $modalInstance, title, body){
+        $scope.title = "";
+        $scope.body = "";
+
+        // If specified, fill window title and message with parameters
+        if (title) {
+            $scope.title = title;
+        }
+        if (body) {
+            $scope.body = body;
+        }
+
+        $scope.confirm = function () {
+            $modalInstance.close();
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss();
+        };
+    };
+
+
+    })
+    .controller("CodeListController",function($scope, $location,modalWindowFactory,Code){
+        $scope.codes = Code.query();
+    
+    $scope.deleteItemWithConfirmation = function(item) {
+
+        var serverDelete = function () {
+            return item.$delete(
+                { codeId: item._id.$oid }, 
+                function () {
+                    toastr.success("成功删除");
+                    // Remove from scope
+                    var index = $scope.codes.indexOf(item);
+                    $scope.codes.splice(index, 1);
+                },
+                // error callback
+                function (error) {
+                    if (error.data === undefined) {
+                        error.data = '';
+                    }
+                    toastr.error("Error. " + error.data);
+                });
+        };
+
+        var title = "删除 '" + item.title + "'";
+        var msg = "确认删除该插码？";
+        modalWindowFactory.show(title, msg, serverDelete);
+
+    };
+    
+})
+    .controller("CodeCreateController",function($scope, $location, Code,Data){
+        $scope.code = new Code();
+    //$scope.require.belongs = [];
+    $scope.dateOptions = Data.dateOptions;
+    $scope.data = Data;
+    $scope.toggle = function(item){
+        item.checked = !item.checked;
+    };
+    // $scope.require.belongs = $scope.data.belongs;
+    // $scope.require.mallDatas = $scope.data.mallDatas;
+    // $scope.require.primeDoors = $scope.data.primeDoors;
+    // $scope.require.primeWaps = $scope.data.primeWaps;
+    // $scope.require.searchs = $scope.data.searchs;
+    // $scope.require.uniteDoors = $scope.data.uniteDoors;
+    // $scope.require.scoreMalls = $scope.data.scoreMalls;
+    // $scope.require.marketings = $scope.data.marketings;
+    // $scope.require.showTypes = $scope.data.showTypes;
+    // $scope.require.inserts = $scope.data.inserts;
+    //after form commit
+    $scope.save = function () {
+        $scope.code.$save(function (code, headers) {
+            toastr.success("新增需求");
+            $location.path('/');
+        });
+    };
+    })
+    .config(function ($routeProvider) {
+        $routeProvider
+            .when('/code/list', {templateUrl: '/static/views/codes/list.html', controller: "CodeListController"})
+            .when('/code/new', {templateUrl: '/static/views/codes/create.html', controller: "CodeCreateController"})
+            //.when('/code/:codeId', {templateUrl: '/static/views/codes/detail.html', controller: "CodeDetailController"});
+
     });
 
 

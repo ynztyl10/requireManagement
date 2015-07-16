@@ -1,0 +1,41 @@
+<h2>
+	插码列表 <a class="btn btn-primary pull-right" href="#/code/new"><i
+		class="icon-plus-sign icon-white"></i> 新增插码</a>
+</h2>
+
+<table class="table  table-bordered table-hover">
+	<tr class="success">
+		<td>
+			<strong>插码标题</strong>
+		</td>
+		<td>
+			<strong>提出人</strong>
+		</td>
+		<td>
+			<strong>计划完成时间</strong>
+		</td>
+		<td>
+			<strong>缩略图</strong>
+		</td>
+		<td>
+			<strong>操作</strong>
+		</td>
+	</tr>
+	<tr ng-repeat="code in codes">
+		<td><a href="#/code/{{code._id.$oid}}">{{code.title}}</a></td>
+		<td>{{code.committer}}</td>
+		<td>{{code.onlineDate}}</td>
+		<td>
+ 			 <div class="col-xs-4 col-md-5">
+    			<a href="" class="thumbnail">
+      			<img class="img-responsive" ng-src="{{code.imgUrl}}" alt="{{code.title}}">
+    			</a>
+  			</div>
+		</td>
+		<td>
+			<a href="#/code/{{code._id.$oid}}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil" ></span>编辑</button></a>
+			<button type="button" class="btn btn-primary" ng-click="deleteItemWithConfirmation(code)"><span class="glyphicon glyphicon-trash"></span>删除</button>
+		</td>
+	</tr>
+</table>
+
