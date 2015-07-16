@@ -3,9 +3,6 @@ FROM centos
 ADD . /src
 RUN mkdir -p /data/db
 RUN chmod +x /src/index.py
-RUN chmod +x /src/mongodb/bin/mongod
-RUN /src/mongodb/bin/mongod --dbpath /data/db
-RUN cd /src
 RUN python /src/index.py
 #RUN easy_install -U pymongo
 
