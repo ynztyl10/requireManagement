@@ -1,4 +1,4 @@
-FROM ynztyl10/requireManagement
+FROM centos
 
 RUN mkdir -p /data/db
 RUN mongodb/bin/mongod --dbpath /data/db
