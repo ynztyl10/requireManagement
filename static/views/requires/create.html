@@ -41,7 +41,7 @@
     <label for="belong" class="col-sm-2 control-label">业务归属范围</label>
     <div class="col-sm-9">
       <label class="checkbox-inline" ng-repeat="belong in data.belongs">
-        <input type="checkbox" name="{{belong.name}}" ng-model="belong.check" value="{{belong.value}}" ng-true-value="{{belong.value}}" ng-click="toggle(belong)" ng-checked="belong.checked"> {{belong.name}}
+        <input type="checkbox" name="{{belong.name}}" ng-model="belong.check" value="{{belong.value}}" ng-click="toggle(belong)" ng-checked="belong.checked"> {{belong.name}}
       </label>
       <h6>注：商城门户包含移动商城、积分商城、一级门户、统一门户、统一搜索</h6>
     </div>
@@ -72,61 +72,62 @@
   <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="headingOne">
       <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        <a data-toggle="collapse" data-parent="#accordion" ng-click="collapseOne =! collapseOne" aria-expanded="true" aria-controls="collapseOne">
           移动商城
         </a>
       </h4>
     </div>
-    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+    <div collapse="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
       <div class="panel-body">
-        <label class="checkbox-inline" ng-repeat="mallData in data.mallDatas">
-        <input type="checkbox" name="{{mallData.name}}" ng-model="mallData.check" value="{{mallData.value}}" ng-true-value="{{mallData.value}}" ng-click="toggle(mallData)" ng-checked="mallData.checked"> {{mallData.name}}
-      </label>
+         
+          <label class="checkbox-inline" ng-repeat="mallData in data.mallDatas">
+            <input type="checkbox" name="{{mallData.name}}" ng-model="mallData.check" value="{{mallData.value}}" ng-click="toggle(mallData)" ng-checked="mallData.checked"> {{mallData.name}}
+          </label>
       </div>
     </div>
   </div>
   <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="headingTwo">
       <h4 class="panel-title">
-        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" ng-click="collapseTwo =! collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
           一级门户
         </a>
       </h4>
     </div>
-    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+    <div collapse="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
       <div class="panel-body">
         <label class="checkbox-inline" ng-repeat="primeDoor in data.primeDoors">
-        <input type="checkbox" name="{{primeDoor.name}}" ng-model="primeDoor.check" value="{{primeDoor.value}}" ng-true-value="{{primeDoor.value}}" ng-click="toggle(primeDoor)" ng-checked="primeDoor.checked"> {{primeDoor.name}}
+        <input type="checkbox" name="{{primeDoor.name}}" ng-model="primeDoor.check" value="{{primeDoor.value}}" ng-click="toggle(primeDoor)" ng-checked="primeDoor.checked"> {{primeDoor.name}}
       </div>
     </div>
   </div>
   <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="headingThree">
       <h4 class="panel-title">
-        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" ng-click="collapseThree =! collapseThree" aria-expanded="false" aria-controls="collapseThree">
           一级WAP
         </a>
       </h4>
     </div>
-    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+    <div collapse="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
       <div class="panel-body">
         <label class="checkbox-inline" ng-repeat="primeWap in data.primeWaps">
-        <input type="checkbox" name="{{primeWap.name}}" ng-model="primeWap.check" value="{{primeWap.value}}" ng-true-value="{{primeWap.value}}" ng-click="toggle(primeWap)" ng-checked="primeWap.checked"> {{primeWap.name}}
+        <input type="checkbox" name="{{primeWap.name}}" ng-model="primeWap.check" value="{{primeWap.value}}" ng-click="toggle(primeWap)" ng-checked="primeWap.checked"> {{primeWap.name}}
       </div>
     </div>
   </div>
   <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="headingFour">
       <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+        <a data-toggle="collapse" data-parent="#accordion" ng-click="collapseFour =! collapseFour" aria-expanded="true" aria-controls="collapseFour">
           统一搜索
         </a>
       </h4>
     </div>
-    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+    <div collapse="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
       <div class="panel-body">
         <label class="checkbox-inline" ng-repeat="search in data.searchs">
-        <input type="checkbox" name="{{search.name}}" ng-model="search.check" value="{{search.value}}" ng-true-value="{{search.value}}" ng-click="toggle(search)" ng-checked="search.checked"> {{search.name}}
+        <input type="checkbox" name="{{search.name}}" ng-model="search.check" value="{{search.value}}" ng-click="toggle(search)" ng-checked="search.checked"> {{search.name}}
       </label>
       </div>
     </div>
@@ -134,15 +135,15 @@
   <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="headingFive">
       <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
+        <a data-toggle="collapse" data-parent="#accordion" ng-click="collapseFive =! collapseFive" aria-expanded="true" aria-controls="collapseFive">
           统一门户
         </a>
       </h4>
     </div>
-    <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+    <div collapse="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
       <div class="panel-body">
         <label class="checkbox-inline" ng-repeat="uniteDoor in data.uniteDoors">
-        <input type="checkbox" name="{{uniteDoor.name}}" ng-model="uniteDoor.check" value="{{uniteDoor.value}}" ng-true-value="{{uniteDoor.value}}" ng-click="toggle(uniteDoor)" ng-checked="uniteDoor.checked"> {{uniteDoor.name}}
+        <input type="checkbox" name="{{uniteDoor.name}}" ng-model="uniteDoor.check" value="{{uniteDoor.value}}" ng-click="toggle(uniteDoor)" ng-checked="uniteDoor.checked"> {{uniteDoor.name}}
       </label>
       </div>
     </div>
@@ -150,15 +151,15 @@
     <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="headingSeven">
       <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
+        <a data-toggle="collapse" data-parent="#accordion" ng-click="collapseSeven =! collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
           积分商城
         </a>
       </h4>
     </div>
-    <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
+    <div collapse="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
       <div class="panel-body">
         <label class="checkbox-inline" ng-repeat="scoreMall in data.scoreMalls">
-        <input type="checkbox" name="{{scoreMall.name}}" ng-model="scoreMall.check" value="{{scoreMall.value}}" ng-true-value="{{scoreMall.value}}" ng-click="toggle(scoreMall)" ng-checked="scoreMall.checked"> {{scoreMall.name}}
+        <input type="checkbox" name="{{scoreMall.name}}" ng-model="scoreMall.check" value="{{scoreMall.value}}" ng-click="toggle(scoreMall)" ng-checked="scoreMall.checked"> {{scoreMall.name}}
       </label>
       </div>
     </div>
@@ -166,15 +167,15 @@
   <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="headingSix">
       <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="true" aria-controls="collapseSix">
+        <a data-toggle="collapse" data-parent="#accordion" ng-click="collapseSix =! collapseSix" aria-expanded="true" aria-controls="collapseSix">
           当期营销
         </a>
       </h4>
     </div>
-    <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+    <div collapse="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
       <div class="panel-body">
         <label class="checkbox-inline" ng-repeat="marketing in data.marketings">
-        <input type="checkbox" name="{{marketing.name}}" ng-model="marketing.check" value="{{marketing.value}}" ng-true-value="{{marketing.value}}" ng-click="toggle(marketing)" ng-checked="marketing.checked"> {{marketing.name}}
+        <input type="checkbox" name="{{marketing.name}}" ng-model="marketing.check" value="{{marketing.value}}" ng-click="toggle(marketing)" ng-checked="marketing.checked"> {{marketing.name}}
       </label>
       </div>
     </div>
@@ -187,7 +188,7 @@
     <label for="showType" class="col-sm-2 control-label">展现形式</label>
     <div class="col-sm-9">
       <label class="checkbox-inline" ng-repeat="showType in data.showTypes">
-        <input type="checkbox" name="{{showType.name}}" ng-model="showType.check" value="{{showType.value}}" ng-true-value="{{showType.value}}" ng-click="toggle(showType)" ng-checked="showType.checked"> {{showType.name}}
+        <input type="checkbox" name="{{showType.name}}" ng-model="showType.check" value="{{showType.value}}" ng-click="toggle(showType)" ng-checked="showType.checked"> {{showType.name}}
       </label>
     </div>
   </div>
@@ -203,7 +204,7 @@
     <label for="isNewInsert" class="col-sm-2 control-label">新增插码</label>
     <div class="col-sm-9">
       <label class="checkbox-inline" ng-repeat="insert in data.inserts">
-        <input type="checkbox" name="{{insert.name}}" ng-model="insert.check" value="{{insert.value}}" ng-true-value="{{insert.value}}" ng-click="toggle(insert)" ng-checked="insert.checked"> {{insert.name}}
+        <input type="checkbox" name="{{insert.name}}" ng-model="insert.check" value="{{insert.value}}" ng-click="toggle(insert)" ng-checked="insert.checked"> {{insert.name}}
       </label>
     </div>
   </div>
