@@ -3,7 +3,7 @@ FROM centos
 ADD . /src
 RUN cd /src
 RUN pwd
-RUN ls -al
+RUN ls -al /src
 #RUN mongodb/bin/mongod --dbpath /data/db
 #RUN easy_install -U pymongo
 
