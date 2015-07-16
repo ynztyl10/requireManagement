@@ -9,4 +9,5 @@ RUN chmod +x /src/index.py
 #RUN easy_install -U pymongo
 
 EXPOSE 9999
-CMD ["python", "/src/index.py"]
+RUN nohup python /src/index.py &
+RUN echo "success"
