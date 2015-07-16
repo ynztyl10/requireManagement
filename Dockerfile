@@ -2,7 +2,8 @@ FROM centos
 
 RUN mkdir -p /data/db
 RUN pwd
-RUN mongodb/bin/mongod --dbpath /data/db
-RUN python index.py
+RUN ls -al
+#RUN mongodb/bin/mongod --dbpath /data/db
+RUN easy_install -U pymongo
 
 EXPOSE 9999
