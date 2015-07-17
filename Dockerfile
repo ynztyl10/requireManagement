@@ -7,8 +7,8 @@ RUN easy_install -U tornado
 RUN easy_install -U pymongo
 RUN chmod +x /src/index.py
 RUN chmod +x /src/mongodb/bin/mongod
-RUN nohup /src/mongodb/bin/mongod --dbpath /data/db &
+RUN /src/mongodb/bin/mongod --dbpath /data/db 
 RUN echo "run mongodb success"
-EXPOSE 9999
-RUN nohup python /src/index.py &
+RUN python /src/index.py 
 RUN echo "success"
+EXPOSE 9999
