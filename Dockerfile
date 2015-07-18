@@ -3,7 +3,7 @@ FROM tutum/mongodb
 
 RUN ls -al
 RUN mkdir -p /data/db
-RUN mongod --dbpath /data/db
+RUN nohup mongod --dbpath /data/db &
 RUN ps -ef| grep mongo
 RUN echo "run mongodb success"
 
