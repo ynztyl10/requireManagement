@@ -8,7 +8,7 @@ from bson import json_util
 from bson.objectid import ObjectId
 
 
-MONGODB_DB_URL = os.environ.get('27017/tcp').replace('tcp','mongodb') if os.environ.get('27017/tcp') else 'mongodb://localhost:27017/'
+MONGODB_DB_URL = os.environ.get('MONGODB_PORT_27017_TCP').replace('tcp','mongodb') if os.environ.get('MONGODB_PORT_27017_TCP') else 'mongodb://localhost:27017/'
 MONGODB_DB_NAME = os.environ.get('OPENSHIFT_APP_NAME') if os.environ.get('OPENSHIFT_APP_NAME') else 'getRequires'
 
 client = MongoClient(MONGODB_DB_URL)
