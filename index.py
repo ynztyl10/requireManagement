@@ -14,7 +14,7 @@ MONGODB_DB_NAME = str(os.environ.get('MONGODB_INSTANCE_NAME')) if os.environ.get
 MONGODB_DB_USER = str(os.environ.get('MONGODB_USERNAME')) if os.environ.get('MONGODB_USERNAME') else ''
 MONGODB_DB_PASSWD = str(os.environ.get('MONGODB_PASSWORD')) if os.environ.get('MONGODB_PASSWORD') else ''
 client = MongoClient(MONGODB_DB_HOST,MONGODB_DB_PORT)
-client.a7b3hilIPe0tYx6Q.authenticate(MONGODB_DB_USER, MONGODB_DB_PASSWD)
+client[MONGODB_DB_NAME].authenticate(MONGODB_DB_USER, MONGODB_DB_PASSWD)
 db = client[MONGODB_DB_NAME]
 
 class IndexHandler(web.RequestHandler):
