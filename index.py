@@ -12,9 +12,9 @@ MONGODB_DB_HOST = str(os.environ.get('MONGODB_PORT_27017_TCP_ADDR')) if os.envir
 MONGODB_DB_PORT = int(os.environ.get('MONGODB_PORT_27017_TCP_PORT')) if os.environ.get('MONGODB_PORT_27017_TCP_PORT') else 27017
 MONGODB_DB_NAME = str(os.environ.get('MONGODB_INSTANCE_NAME')) if os.environ.get('MONGODB_INSTANCE_NAME') else 'getRequires'
 MONGODB_DB_USER = str(os.environ.get('MONGODB_USERNAME')) if os.environ.get('MONGODB_USERNAME') else ''
-MONGODB_DB_PASSWD = os.environ.get('MONGODB_PASSWORD') if os.environ.get('MONGODB_PASSWORD') else ''
+MONGODB_DB_PASSWD = str(os.environ.get('MONGODB_PASSWORD')) if os.environ.get('MONGODB_PASSWORD') else ''
 client = MongoClient(MONGODB_DB_HOST,MONGODB_DB_PORT)
-client.the_database.authenticate(MONGODB_DB_USER, MONGODB_DB_PASSWD)
+client.MONGODB_DB_NAME.authenticate(MONGODB_DB_USER, MONGODB_DB_PASSWD)
 db = client[MONGODB_DB_NAME]
 
 class IndexHandler(web.RequestHandler):
