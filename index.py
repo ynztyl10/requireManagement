@@ -61,7 +61,45 @@ class RequireHandler(web.RequestHandler):
             self.write(json.dumps((res),default=json_util.default))
 
 
+class CodesHandler(web.RequestHandler):
+    """docstring for CodesHandler"""
+    def get(self):
+        codes = db.codes.find()
+        self.set_header("Content-Type", "application/json")
+        self.write(json.dumps(list(codes),default=json_util.default))
 
+    def post(self):
+        code_data = json.loads(self.request.body)
+        code_id = db.codes.insert(code_data)
+        print('code created with id ' + str(code_id))
+        self.set_header("Content-Type", "application/json")
+        self.set_status(201)
+
+class CodeHandler(web.RequestHandler):
+    """docstring for CodeHandler"""
+    def get(self, code_id):
+        code = db.codes.find_one({'_id':ObjectId(str(code_id))})
+        self.set_header("Content-Type", "application/json")
+        self.write(json.dumps((code),default=json_util.default))
+
+    def post(self, code_id):
+        code_data = json.loads(self.request.body)
+        code_data['_id'] = ObjectId(str(code_id))
+        res = db.codes.save(code_data)
+        self.set_header("Content-Type","application/json")
+        self.set_status(201)
+
+    def delete(self, code_id):
+        res = db.codes.delete_one({"_id":ObjectId(str(code_id))})
+        if res.raw_result['ok'] == 1:
+            self.set_header("Content-Type","application/json")
+            self.set_status(201)
+        else:
+            res = {"errno":-1,"errmsg":"删除失败"}
+            self.set_header("Content-Type","application/json")
+            self.write(json.dumps((res),default=json_util.default))
+        
+        
 settings = {
     "template_path": os.path.join(os.path.dirname(__file__), "templates"),
     "static_path": os.path.join(os.path.dirname(__file__), "static"),
@@ -72,7 +110,9 @@ application = web.Application([
     (r'/', IndexHandler),
     (r'/index', IndexHandler),
     (r'/api/v1/requires',RequiresHandler),
-    (r'/api/v1/requires/(.*)', RequireHandler)
+    (r'/api/v1/requires/(.*)', RequireHandler),
+    (r'/api/v1/codes',CodesHandler),
+    (r'/api/v1/codes/(.*)', CodeHandler)
 ],**settings)
 
 if __name__ == "__main__":
