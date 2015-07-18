@@ -10,7 +10,7 @@ from bson.objectid import ObjectId
 
 MONGODB_DB_HOST = str(os.environ.get('MONGODB_PORT_27017_TCP_ADDR')) if os.environ.get('MONGODB_PORT_27017_TCP_ADDR') else 'localhost'
 MONGODB_DB_PORT = int(os.environ.get('MONGODB_PORT_27017_TCP_PORT')) if os.environ.get('MONGODB_PORT_27017_TCP_PORT') else 27017
-MONGODB_DB_NAME = str(os.environ.get('OPENSHIFT_APP_NAME')) if os.environ.get('OPENSHIFT_APP_NAME') else 'getRequires'
+MONGODB_DB_NAME = str(os.environ.get('MONGODB_INSTANCE_NAME')) if os.environ.get('MONGODB_INSTANCE_NAME') else 'getRequires'
 MONGODB_DB_USER = str(os.environ.get('MONGODB_USERNAME')) if os.environ.get('MONGODB_USERNAME') else ''
 MONGODB_DB_PASSWD = os.environ.get('MONGODB_PASSWORD') if os.environ.get('MONGODB_PASSWORD') else ''
 client = MongoClient(MONGODB_DB_HOST,MONGODB_DB_PORT)
