@@ -10,8 +10,10 @@ from bson.objectid import ObjectId
 
 MONGODB_DB_URL = os.environ.get('MONGODB_PORT_27017_TCP').replace('tcp','mongodb') if os.environ.get('MONGODB_PORT_27017_TCP') else 'mongodb://localhost:27017/'
 MONGODB_DB_NAME = os.environ.get('OPENSHIFT_APP_NAME') if os.environ.get('OPENSHIFT_APP_NAME') else 'getRequires'
-
+MONGODB_DB_USER = os.environ.get('MONGODB_USERNAME') if os.environ.get('MONGODB_USERNAME') else ''
+MONGODB_DB_PASSWD = os.environ.get('MONGODB_PASSWORD') if os.environ.get('MONGODB_PASSWORD') else ''
 client = MongoClient(MONGODB_DB_URL)
+client.the_database.authenticate(MONGODB_DB_USER, MONGODB_DB_PASSWD)
 db = client[MONGODB_DB_NAME]
 
 class IndexHandler(web.RequestHandler):
