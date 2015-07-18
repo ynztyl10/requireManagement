@@ -3,9 +3,8 @@ FROM tutum/mongodb
 
 RUN ls -al
 RUN mkdir -p /data/db
-CMD ["mongod", "--dbpath /data/db"]
+RUN mongod --dbpath /data/db
 RUN ps -ef| grep mongo
-RUN netstat -anp|grep 27017
 RUN echo "run mongodb success"
 
 
