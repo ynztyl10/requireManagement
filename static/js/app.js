@@ -1387,29 +1387,38 @@ angular.module("getcodes", ["getcodes.services","ngRoute","ui.date","ui.bootstra
     $scope.toggle = function(item){
         item.checked = !item.checked;
     };
-    // $scope.require.belongs = $scope.data.belongs;
-    // $scope.require.mallDatas = $scope.data.mallDatas;
-    // $scope.require.primeDoors = $scope.data.primeDoors;
-    // $scope.require.primeWaps = $scope.data.primeWaps;
-    // $scope.require.searchs = $scope.data.searchs;
-    // $scope.require.uniteDoors = $scope.data.uniteDoors;
-    // $scope.require.scoreMalls = $scope.data.scoreMalls;
-    // $scope.require.marketings = $scope.data.marketings;
-    // $scope.require.showTypes = $scope.data.showTypes;
-    // $scope.require.inserts = $scope.data.inserts;
-    //after form commit
     $scope.save = function () {
         $scope.code.$save(function (code, headers) {
             toastr.success("新增需求");
-            $location.path('/');
+            $location.path('/code/list');
         });
     };
     })
+    .controller("CodeDetailController",function($scope, $routeParams,$location, Code, Data){
+    $scope.data = Data;
+    var codeId = $routeParams.codeId;
+    $scope.code = Code.get({codeId: codeId},function(){
+        
+    });
+    $scope.toggle = function(item){
+        item.checked = !item.checked;
+    };
+    $scope.dateOptions = Data.dateOptions;
+    $scope.save = function(){
+        $scope.code.$update({codeId:codeId},function(code, headers){
+            toastr.success("修改插码");
+            $location.path('/code/list');
+        });
+    };
+    }
+
+
+    )
     .config(function ($routeProvider) {
         $routeProvider
             .when('/code/list', {templateUrl: '/static/views/codes/list.html', controller: "CodeListController"})
             .when('/code/new', {templateUrl: '/static/views/codes/create.html', controller: "CodeCreateController"})
-            //.when('/code/:codeId', {templateUrl: '/static/views/codes/detail.html', controller: "CodeDetailController"});
+            .when('/code/:codeId', {templateUrl: '/static/views/codes/detail.html', controller: "CodeDetailController"});
 
     });
 
