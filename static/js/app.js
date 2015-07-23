@@ -1281,7 +1281,7 @@ angular.module("getcodes.services", ["ngResource"]).
         return Code;
     });
 
-angular.module("getcodes", ["getcodes.services","uploadModule","ngRoute","ui.date","ui.bootstrap"])
+angular.module("getcodes", ["getcodes.services","ngRoute","ui.date","ui.bootstrap"])
     .factory('modalWindowFactory', function ($modal) {
 
     var modalWindowController = _modalWindowController;
@@ -1411,123 +1411,107 @@ angular.module("getcodes", ["getcodes.services","uploadModule","ngRoute","ui.dat
 
 
 
-(function () {
-  'use strict';
-  var app = angular.module('uploadModule', [
-    'blueimp.fileupload'
-  ]);
-  
-  app.directive('ngUploadForm', ['$rootScope', 'fileUpload', function () {
-      return {
-        restrict: 'E',
-        templateUrl: '/static/views/codes/fileform.html',
-        scope: {
-          allowed: '@',
-          url: '@',
-          autoUpload: '@',
-          sizeLimit: '@',
-          ngModel: '=',
-          name: '@'
-        },
-        controller: function ($rootScope, $scope, $element, fileUpload) {
-          $scope.$on('fileuploaddone', function (e, data) {
-            fileUpload.addFieldData($scope.name, data._response.result.files[0].result);
-          });
-
-          $scope.options = {
-            url: $scope.url,
-            dropZone: $element,
-            maxFileSize: $scope.sizeLimit,
-            autoUpload: $scope.autoUpload
-          };
-          $scope.loadingFiles = false;
-
-          if (!$scope.queue) {
-            $scope.queue = [];
-          }
-
-          var generateFileObject = function generateFileObjects(objects) {
-            angular.forEach(objects, function (value, key) {
-              var fileObject = {
-                name: value.filename,
-                size: value.length,
-                url: value.url,
-                thumbnailUrl: value.url,
-                deleteUrl: value.url,
-                deleteType: 'DELETE',
-                result: value
-              };
-
-              if (fileObject.url && fileObject.url.charAt(0) !== '/') {
-                fileObject.url = '/'+fileObject.url;
-              }
-
-              if (fileObject.deleteUrl && fileObject.deleteUrl.charAt(0) !== '/') {
-                fileObject.deleteUrl = '/'+fileObject.deleteUrl;
-              }
-
-              if (fileObject.thumbnailUrl && fileObject.thumbnailUrl.charAt(0) !== '/') {
-                fileObject.thumbnailUrl = '/'+fileObject.thumbnailUrl;
-              }
-
-              $scope.queue[key] = fileObject;
+$(function () {
+    'use strict';
+    // Change this to the location of your server-side upload handler:
+    var url = "/api/v1/img/upload",
+        uploadButton = $('<button/>')
+            .addClass('btn btn-primary')
+            .prop('disabled', true)
+            .text('Processing...')
+            .on('click', function () {
+                var $this = $(this),
+                    data = $this.data();
+                $this
+                    .off('click')
+                    .text('Abort')
+                    .on('click', function () {
+                        $this.remove();
+                        data.abort();
+                    });
+                data.submit().always(function () {
+                    $this.remove();
+                });
             });
-          };
-          fileUpload.registerField($scope.name);
-          $scope.filequeue = fileUpload.fieldData[$scope.name];
-
-          $scope.$watchCollection('filequeue', function (newval) {
-            generateFileObject(newval);
-          });
-        }
-      };
-    }])
-    .controller('FileDestroyController', ['$rootScope', '$scope', '$http', 'fileUpload', function ($rootScope, $scope, $http, fileUpload) {
-      var file = $scope.file,
-        state;
-
-      if ($scope.$parent && $scope.$parent.$parent && $scope.$parent.$parent.$parent.name) {
-        $scope.fieldname = $scope.$parent.$parent.$parent.name;
-      }
-
-      if (!fileUpload.fieldData[$scope.name]) {
-        fileUpload.fieldData[$scope.name] = [];
-      }
-
-      $scope.filequeue = fileUpload.fieldData;
-
-      if (file.url) {
-        file.$state = function () {
-          return state;
-        };
-        file.$destroy = function () {
-          state = 'pending';
-          return $http({
-            url: file.deleteUrl,
-            method: file.deleteType
-          }).then(
-            function () {
-              state = 'resolved';
-              fileUpload.removeFieldData($scope.fieldname, file.result._id);
-              $scope.clear(file);
-            },
-            function () {
-              state = 'rejected';
-              fileUpload.removeFieldData($scope.fieldname, file.result._id);
-              $scope.clear(file);
+    $('#fileupload').fileupload({
+        url: url,
+        dataType: 'json',
+        autoUpload: false,
+        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+        maxFileSize: 999000,
+        // Enable image resizing, except for Android and Opera,
+        // which actually support image resizing, but fail to
+        // send Blob objects via XHR requests:
+        disableImageResize: /Android(?!.*Chrome)|Opera/
+            .test(window.navigator.userAgent),
+        previewMaxWidth: 100,
+        previewMaxHeight: 100,
+        previewCrop: true
+    }).on('fileuploadadd', function (e, data) {
+        data.context = $('<div/>').appendTo('#files');
+        $.each(data.files, function (index, file) {
+            var node = $('<p/>')
+                    .append($('<span/>').text(file.name));
+            if (!index) {
+                node
+                    .append('<br>')
+                    .append(uploadButton.clone(true).data(data));
             }
-          );
+            node.appendTo(data.context);
+        });
+    }).on('fileuploadprocessalways', function (e, data) {
+        var index = data.index,
+            file = data.files[index],
+            node = $(data.context.children()[index]);
+        if (file.preview) {
+            node
+                .prepend('<br>')
+                .prepend(file.preview);
+        }
+        if (file.error) {
+            node
+                .append('<br>')
+                .append($('<span class="text-danger"/>').text(file.error));
+        }
+        if (index + 1 === data.files.length) {
+            data.context.find('button')
+                .text('Upload')
+                .prop('disabled', !!data.files.error);
+        }
+    }).on('fileuploadprogressall', function (e, data) {
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+        $('#progress .progress-bar').css(
+            'width',
+            progress + '%'
+        );
+    }).on('fileuploaddone', function (e, data) {
+        $.each(data.result.files, function (index, file) {
+            if (file.url) {
+                var link = $('<a>')
+                    .attr('target', '_blank')
+                    .prop('href', file.url);
+                $(data.context.children()[index])
+                    .wrap(link);
+            } else if (file.error) {
+                var error = $('<span class="text-danger"/>').text(file.error);
+                $(data.context.children()[index])
+                    .append('<br>')
+                    .append(error);
+            }
+        });
+    }).on('fileuploadfail', function (e, data) {
+        $.each(data.files, function (index) {
+            var error = $('<span class="text-danger"/>').text('File upload failed.');
+            $(data.context.children()[index])
+                .append('<br>')
+                .append(error);
+        });
+    }).prop('disabled', !$.support.fileInput)
+        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+});
 
 
-        };
-      } else if (!file.$cancel && !file._index) {
-        file.$cancel = function () {
-          $scope.clear(file);
-        };
-      }
-    }
-    ]);
-})();
+
 
 
 
