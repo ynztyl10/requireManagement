@@ -18,16 +18,20 @@ angular.module("getrequires.services", ["ngResource"]).
             "value" : "31省SDC"
         },
         {
-            "name" : "商城门户",
-            "value" : "商城门户"
+            "name" : "移动商城",
+            "value" : "移动商城"
         },
         {
-            "name" : "WAP/APP",
-            "value" : "WAP/APP"
+            "name" : "一级门户",
+            "value" : "一级门户"
         },
         {
-            "name" : "营销活动",
-            "value" : "营销活动"
+            "name" : "一级WAP",
+            "value" : "一级WAP"
+        },
+        {
+            "name" : "APP",
+            "value" : "APP"
         },
         {
             "name" : "其他",

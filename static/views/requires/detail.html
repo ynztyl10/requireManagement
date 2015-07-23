@@ -27,43 +27,21 @@
 
 
   <div class="form-group">
-    <label for="datasource" class="col-sm-2 control-label">数据来源</label>
-    <div class="col-sm-3">
-      <input type="text" class="form-control" ng-model="require.datasource" id="datasource"/>
-    </div>
-    <label for="collectType" class="col-sm-2 control-label">具体采集类型</label>
-    <div class="col-sm-3">
-      <input type="text" class="form-control" ng-model="require.collectType" id="collectType"/>
-    </div>
-  </div>
-
-  <div class="form-group">
     <label for="belong" class="col-sm-2 control-label">业务归属范围</label>
     <div class="col-sm-9">
       <label class="checkbox-inline" ng-repeat="belong in data.belongs">
         <input type="checkbox" name="{{belong.name}}" ng-model="belong.check" value="{{belong.value}}" ng-click="toggle(belong)" ng-checked="belong.checked"> {{belong.name}}
       </label>
-      <h6>注：商城门户包含移动商城、积分商城、一级门户、统一门户、统一搜索</h6>
     </div>
   </div>
 
   <div class="form-group">
-    <label for="endDate" class="col-sm-2 control-label">插码完成时间</label>
-    <div class="col-sm-3">
-      <input type="text" class="form-control" ui-date="dateOptions" ng-model="require.endDate" id="endDate" required>
-    </div>
-    <label for="onlineDate" class="col-sm-2 control-label">预计上线时间</label>
+    <label for="onlineDate" class="col-sm-2 control-label">数据提取时间</label>
     <div class="col-sm-3">
       <input type="text" class="form-control" ui-date="dateOptions" ng-model="require.onlineDate" id="onlineDate" required>
     </div>
   </div>
 
-  <div class="form-group">
-    <label for="testPlan" class="col-sm-2 control-label">测试计划</label>
-    <div class="col-sm-3">
-      <input type="text" class="form-control" ng-model="require.testPlan" id="testPlan"/>
-    </div>
-  </div>
 
   <div class="form-group">
     <label for="dataContent" class="col-sm-2 control-label">获取数据</label>
