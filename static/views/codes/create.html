@@ -46,22 +46,44 @@
 
   <div class="form-group">
     <label for="imgUpload" class="col-sm-2 control-label">上传图片</label>
-    <div class="col-sm-3">
+    <div class="col-sm-8">
     <span class="btn btn-success fileinput-button">
         <i class="glyphicon glyphicon-plus"></i>
         <span>添加图片</span>
         <!-- The file input field used as target for the file upload widget -->
-        <input type="file" accept="image/*" ngf-select="" ng-model="code.picFile" name="file" class="ng-pristine ng-untouched ng-valid ng-scope" __ngf_gen__="true">
+        <input type="file" accept="image/*" ngf-select ngf-multiple="true" ng-model="code.files" class="ng-valid ng-dirty ng-touched">
     </span>
+        <ul style="clear:both" ng-show="code.files.length > 0" class="response">
+        <li class="sel-file" ng-repeat="f in code.files">
+        <img ng-show="f.type.indexOf('image') > -1" ngf-src="f" class="thumb" ngf-accept="'image/*'">
+                <span class="progress" ng-show="f.progress >= 0">
+                    <div style="width:{{f.progress}}%">{{f.progress}}%</div>
+                </span>
+      <button class="button" ng-click="f.upload.abort();f.upload.aborted=true"
+              ng-show="f.upload != null && f.progress < 100 && !f.upload.aborted">Abort
+      </button>
+      {{f.name}} - size: {{f.size}}B - type: {{f.type}}
+      <a ng-show="f.result" href="javascript:void(0)" ng-click="f.showDetail = !f.showDetail">details</a>
+      <div ng-show="f.showDetail">
+        <br/>
+        <div data-ng-show="f.result.result == null">{{f.result}}</div>
+        <ul>
+          <li ng-repeat="item in f.result.result">
+            <div data-ng-show="item.name">file name: {{item.name}}</div>
+            <div data-ng-show="item.fieldName">name: {{item.fieldName}}</div>
+            <div data-ng-show="item.size">size on the serve: {{item.size}}</div>
+            <div data-ng-show="item.value">value: {{item.value}}</div>
+          </li>
+        </ul>
+        <div data-ng-show="f.result.requestHeaders" class="reqh">request headers: {{f.result.requestHeaders}}</div>
+      </div>
+    </li>
+  </ul>   
+    
     <br>
     <br>
     </div>
     
-    <div class="col-sm-offset-2 col-sm-8"> 
-     <div id="files" class="files">
-         
-     </div>
-    </div>
 
   </div>
   <div class="form-group">

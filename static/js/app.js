@@ -1285,7 +1285,7 @@ angular.module("getcodes.services", ["ngResource"]).
         return Code;
     });
 
-angular.module("getcodes", ["getcodes.services","ngRoute","ui.date","ui.bootstrap"])
+angular.module("getcodes", ["getcodes.services","ngRoute","ui.date","ui.bootstrap","ngFileUpload"])
     .factory('modalWindowFactory', function ($modal) {
 
     var modalWindowController = _modalWindowController;
@@ -1379,7 +1379,7 @@ angular.module("getcodes", ["getcodes.services","ngRoute","ui.date","ui.bootstra
     };
     
 })
-    .controller("CodeCreateController",function($scope, $location, Code,Data){
+    .controller("CodeCreateController",function($scope, Upload,$timeout,$location, Code,Data){
         $scope.code = new Code();
     //$scope.require.belongs = [];
     $scope.dateOptions = Data.dateOptions;
@@ -1391,6 +1391,46 @@ angular.module("getcodes", ["getcodes.services","ngRoute","ui.date","ui.bootstra
         $scope.code.$save(function (code, headers) {
             toastr.success("新增需求");
             $location.path('/code/list');
+        });
+    };
+
+        $scope.$watch('code.files', function(){
+            if ($scope.code.files != null) {
+            for (var i = 0; i < $scope.code.files.length; i++) {
+                $scope.errorMsg = null;
+                (function (file) {
+                    upload(file);
+                })($scope.code.files[i]);
+            }
+        }
+
+        });
+        function upload (file) {
+                file.upload = Upload.upload({
+                    url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
+                    method: 'POST',
+                    headers: {
+                        'my-header': 'my-header-value'
+                    },
+                    fields: {username: $scope.username},
+                    file: file,
+                });
+            file.upload.then(function (response) {
+                $timeout(function () {
+                    file.result = response.data;
+                });
+            }, function (response) {
+                if (response.status > 0)
+                    $scope.errorMsg = response.status + ': ' + response.data;
+            });
+
+
+        file.upload.progress(function (evt) {
+            // Math.min is to fix IE which reports 200% sometimes
+            file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+        });
+        file.upload.xhr(function (xhr) {
+            // xhr.upload.addEventListener('abort', function(){console.log('abort complete')}, false);
         });
     };
     })
@@ -1422,6 +1462,9 @@ angular.module("getcodes", ["getcodes.services","ngRoute","ui.date","ui.bootstra
 
     });
 
+
+angular.module("fileUpload",["ngFileUpload"])
+    
 
 
 
