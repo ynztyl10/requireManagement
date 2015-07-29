@@ -1115,7 +1115,7 @@ angular.module("getrequires", ["getrequires.services","ngRoute","ui.date","ui.bo
             // Show window
             var modalInstance = $modal.open({
                 animation : true,
-                templateUrl: '/static/views/requires/modal-view.html',
+                templateUrl: '/static/views/common/modal-view.html',
                 controller: modalWindowController,
                 size: 'sm',
                 resolve: {
@@ -1297,7 +1297,7 @@ angular.module("getcodes", ["getcodes.services","ngRoute","ui.date","ui.bootstra
             // Show window
             var modalInstance = $modal.open({
                 animation : true,
-                templateUrl: '/static/views/requires/modal-view.html',
+                templateUrl: '/static/views/common/modal-view.html',
                 controller: modalWindowController,
                 size: 'sm',
                 resolve: {
@@ -1389,11 +1389,10 @@ angular.module("getcodes", ["getcodes.services","ngRoute","ui.date","ui.bootstra
     };
     $scope.save = function () {
         $scope.code.$save(function (code, headers) {
-            toastr.success("新增需求");
+            toastr.success("新增插码");
             $location.path('/code/list');
         });
     };
-
         $scope.$watch('code.files', function(){
             if ($scope.code.files != null) {
             for (var i = 0; i < $scope.code.files.length; i++) {
@@ -1407,7 +1406,7 @@ angular.module("getcodes", ["getcodes.services","ngRoute","ui.date","ui.bootstra
         });
         function upload (file) {
                 file.upload = Upload.upload({
-                    url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
+                    url: '/api/v1/img/upload',
                     method: 'POST',
                     headers: {
                         'my-header': 'my-header-value'
@@ -1434,7 +1433,7 @@ angular.module("getcodes", ["getcodes.services","ngRoute","ui.date","ui.bootstra
         });
     };
     })
-    .controller("CodeDetailController",function($scope, $routeParams,$location, Code, Data){
+    .controller("CodeDetailController",function($scope, $timeout,Upload,$routeParams,$location, Code, Data){
     $scope.data = Data;
     var codeId = $routeParams.codeId;
     $scope.code = Code.get({codeId: codeId},function(){
@@ -1450,6 +1449,46 @@ angular.module("getcodes", ["getcodes.services","ngRoute","ui.date","ui.bootstra
             $location.path('/code/list');
         });
     };
+
+    $scope.$watch('code.files', function(){
+            if ($scope.code.files != null) {
+            for (var i = 0; i < $scope.code.files.length; i++) {
+                $scope.errorMsg = null;
+                (function (file) {
+                    upload(file);
+                })($scope.code.files[i]);
+            }
+        }
+
+        });
+        function upload (file) {
+                file.upload = Upload.upload({
+                    url: '/api/v1/img/upload',
+                    method: 'POST',
+                    headers: {
+                        'my-header': 'my-header-value'
+                    },
+                    fields: {username: $scope.username},
+                    file: file,
+                });
+            file.upload.then(function (response) {
+                $timeout(function () {
+                    file.result = response.data;
+                });
+            }, function (response) {
+                if (response.status > 0)
+                    $scope.errorMsg = response.status + ': ' + response.data;
+            });
+
+
+        file.upload.progress(function (evt) {
+            // Math.min is to fix IE which reports 200% sometimes
+            file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+        });
+        file.upload.xhr(function (xhr) {
+            // xhr.upload.addEventListener('abort', function(){console.log('abort complete')}, false);
+        });
+    };
     }
 
 
@@ -1463,7 +1502,6 @@ angular.module("getcodes", ["getcodes.services","ngRoute","ui.date","ui.bootstra
     });
 
 
-angular.module("fileUpload",["ngFileUpload"])
     
 
 

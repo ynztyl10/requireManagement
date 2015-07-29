@@ -46,22 +46,53 @@
 
   <div class="form-group">
     <label for="imgUpload" class="col-sm-2 control-label">上传图片</label>
-    <div class="col-sm-3">
+    <div class="col-sm-8">
     <span class="btn btn-success fileinput-button">
         <i class="glyphicon glyphicon-plus"></i>
         <span>添加图片</span>
         <!-- The file input field used as target for the file upload widget -->
-        <input type="file" accept="image/*" ngf-select="" ng-model="code.picFile" name="file" class="ng-pristine ng-untouched ng-valid ng-scope" __ngf_gen__="true">
+        <input type="file" accept="image/*" ngf-select ngf-multiple="true" ng-model="code.files" class="ng-valid ng-dirty ng-touched">
     </span>
+        <ul style="clear:both" ng-show="code.files.length > 0" class="response">
+        <li class="sel-file" ng-repeat="f in code.files">
+        <img ng-src="/static/uploads/{{f.result.filename}}" class="thumb" ngf-accept="'image/*'">
+                <span class="progress" ng-show="f.progress >= 0">
+                    <div style="width:{{f.progress}}%">{{f.progress}}%</div>
+                </span>
+      <button class="button" ng-click="f.upload.abort();f.upload.aborted=true"
+              ng-show="f.upload != null && f.progress < 100 && !f.upload.aborted">Abort
+      </button>
+      
+        <!-- The file input field used as target for the file upload widget -->
+        <a data-ng-href="/static/uploads/{{f.result.filename}}" title="{{f.result.filename}}" download="{{f.result.filename}}" data-gallery="" class="ng-binding ng-scope" href="/static/uploads/{{f.result.filename}}">
+        <span class="btn btn-success " ng-show="f.result">
+        
+            <i class="glyphicon glyphicon-zoom-in"></i>
+            
+            <span>预览</span>
+            </a>
+        </span>
+        
+        <!-- The blueimp Gallery widget -->
+<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+</div>
+
+    
+      
+    </li>
+  </ul>   
+    
     <br>
     <br>
     </div>
     
-    <div class="col-sm-offset-2 col-sm-8"> 
-     <div id="files" class="files">
-         
-     </div>
-    </div>
 
   </div>
   <div class="form-group">

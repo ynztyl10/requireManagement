@@ -62,21 +62,30 @@
       <button class="button" ng-click="f.upload.abort();f.upload.aborted=true"
               ng-show="f.upload != null && f.progress < 100 && !f.upload.aborted">Abort
       </button>
-      {{f.name}} - size: {{f.size}}B - type: {{f.type}}
-      <a ng-show="f.result" href="javascript:void(0)" ng-click="f.showDetail = !f.showDetail">details</a>
-      <div ng-show="f.showDetail">
-        <br/>
-        <div data-ng-show="f.result.result == null">{{f.result}}</div>
-        <ul>
-          <li ng-repeat="item in f.result.result">
-            <div data-ng-show="item.name">file name: {{item.name}}</div>
-            <div data-ng-show="item.fieldName">name: {{item.fieldName}}</div>
-            <div data-ng-show="item.size">size on the serve: {{item.size}}</div>
-            <div data-ng-show="item.value">value: {{item.value}}</div>
-          </li>
-        </ul>
-        <div data-ng-show="f.result.requestHeaders" class="reqh">request headers: {{f.result.requestHeaders}}</div>
-      </div>
+      
+        <!-- The file input field used as target for the file upload widget -->
+        <a data-ng-href="/static/uploads/{{f.result.filename}}" title="{{f.result.filename}}" download="{{f.result.filename}}" data-gallery="" class="ng-binding ng-scope" href="/static/uploads/{{f.result.filename}}">
+        <span class="btn btn-success " ng-show="f.result">
+        
+            <i class="glyphicon glyphicon-zoom-in"></i>
+            
+            <span>预览</span>
+            </a>
+        </span>
+        
+        <!-- The blueimp Gallery widget -->
+<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+</div>
+
+    
+      
     </li>
   </ul>   
     

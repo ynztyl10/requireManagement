@@ -5,6 +5,7 @@ from tornado.escape import json_encode
 from pymongo import MongoClient
 import json
 from bson import json_util
+import md5
 from bson.objectid import ObjectId
 
 
@@ -100,6 +101,21 @@ class CodeHandler(web.RequestHandler):
             self.set_header("Content-Type","application/json")
             self.write(json.dumps((res),default=json_util.default))
         
+
+class ImgUploadHandler(web.RequestHandler):
+    def post(self):
+        file_obj = self.request.files['file'][0]
+        original_fname = file_obj['filename']
+        extension = os.path.splitext(original_fname)[1]
+        key = md5.new()
+        key.update(file_obj['body'])
+        fname = key.hexdigest()
+        final_filename= fname+extension
+        output_file = open("static/uploads/" + final_filename, 'w')
+        output_file.write(file_obj['body'])
+        self.set_header("Content-Type", "application/json")
+        res = {"filename":final_filename,"filesize":self.request.headers['Content-Length'],"filetype":file_obj['content_type']}
+        self.write(json.dumps((res),default=json_util.default))
         
 settings = {
     "template_path": os.path.join(os.path.dirname(__file__), "templates"),
@@ -113,7 +129,8 @@ application = web.Application([
     (r'/api/v1/requires',RequiresHandler),
     (r'/api/v1/requires/(.*)', RequireHandler),
     (r'/api/v1/codes',CodesHandler),
-    (r'/api/v1/codes/(.*)', CodeHandler)
+    (r'/api/v1/codes/(.*)', CodeHandler),
+    (r'/api/v1/img/upload', ImgUploadHandler)
 ],**settings)
 
 if __name__ == "__main__":
