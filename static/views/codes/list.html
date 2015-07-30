@@ -26,9 +26,9 @@
 		<td>{{code.committer}}</td>
 		<td>{{code.onlineDate}}</td>
 		<td>
- 			 <div class="col-xs-4 col-md-5">
-    			<a href="" class="thumbnail">
-      			<img class="img-responsive" ng-src="{{code.imgUrl}}" alt="{{code.title}}">
+ 			 <div ng-repeat="f in code.files">
+    			<a data-ng-href="/static/uploads/{{f.result.filename}}" title="{{f.result.filename}}" download="{{f.result.filename}}" data-gallery class="ng-binding ng-scope" href="/static/uploads/{{f.result.filename}}">
+      			<img class="thumb" ng-src="/static/uploads/{{f.result.filename}}" alt="{{f.result.filename}}">
     			</a>
   			</div>
 		</td>
@@ -37,5 +37,14 @@
 			<button type="button" class="btn btn-primary" ng-click="deleteItemWithConfirmation(code)"><span class="glyphicon glyphicon-trash"></span>删除</button>
 		</td>
 	</tr>
+	<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+</div>
 </table>
 
