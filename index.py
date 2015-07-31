@@ -111,8 +111,10 @@ class ImgUploadHandler(web.RequestHandler):
         key.update(file_obj['body'])
         fname = key.hexdigest()
         final_filename= fname+extension
-        output_file = open("static/uploads/" + final_filename, 'w')
-        output_file.write(file_obj['body'])
+        file_path = "static/uploads/" + final_filename
+        if not os.path.isfile(file_path):
+            output_file = open(file_path, 'w')
+            output_file.write(file_obj['body'])
         self.set_header("Content-Type", "application/json")
         res = {"filename":final_filename,"filesize":self.request.headers['Content-Length'],"filetype":file_obj['content_type']}
         self.write(json.dumps((res),default=json_util.default))
